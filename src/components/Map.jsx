@@ -7,14 +7,14 @@ function Map() {
     const mapRef = useRef();
     const mapContainerRef = useRef();
 
-    useEffect(() => {
+    useEffect(function() {
         mapboxgl.accessToken = "pk.eyJ1IjoibWljaGFlbC0tIiwiYSI6ImNtOWtzZjBnODB0NDUya3Byb3AyY2NtMncifQ.HFQAbCOMSzGiYDZzTdwCrQ";
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             style: "mapbox://styles/michael--/cm9kutbdp00ot01rcecqthand/draft"
         });
 
-        return () => {
+        return function() {
             mapRef.current.remove();
         }
     }, []);
