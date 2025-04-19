@@ -1,36 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useContext } from 'react'
+import { EarthquakeContext } from '../contexts/EarthquakeDataContext.jsx';
 import '../App.css';
 
 function EarthquakeList() {
-    const [earthquakes, setEarthquakes] = useState([]);
-
-    useEffect(function() {
-        async function getEarthquakeData() {
-            try {
-                const response = await fetch("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson");
-                const collection = await response.json();
-                setEarthquakes(collection.features); //"features" is just the list of earthquakes
-            } 
-            catch(error) {
-                console.error("Could not fetch geojson data: ", error);
-            }
-        }
-        
-        getEarthquakeData();
-    }, [])
+    const earthquakes = useContext(EarthquakeContext);
 
     return (
         <>
-            <ul class="earthquakeList">
+            <div className="list">
                 {earthquakes.map((earthquake) => (
                     <>
-                        <li key={earthquake.id}>
-                            {/* will add other info here like magnitude, time, + how long ago earthquake occurred */}
+                        <div className="listItem" key={earthquake.id}>
+                            <small>{new Date(earthquake.properties.time).toLocaleDateString()}, {new Date(earthquake.properties.time).toLocaleTimeString()}</small>
+                            <strong>Magnitude: {earthquake.properties.mag}</strong>
                             {earthquake.properties.place}
-                        </li>
+                        </div>
                     </>
                 ))}
-            </ul>
+            </div>
         </>
     )
 }
