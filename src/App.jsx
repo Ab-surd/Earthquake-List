@@ -1,27 +1,26 @@
-import EarthquakeContextProvider from './contexts/EarthquakeDataContext';
-import FilterItem from './components/FilterItem';
-import Map from './components/Map'
-import EarthquakeList from './components/EarthquakeList';
+import EarthquakeContextProvider from './context/DataContext.jsx';
+import Accordion from './components/Accordion.jsx';
+import List from './components/List.jsx'
 import './App.css';
 
 function App() {
   return (
     <>
       <EarthquakeContextProvider>
-        <Map />
         <div id="sidebar-container">
           <div id="sidebar">
             <div id="header">
-              <h1>Recent Earthquakes</h1>
-              <h3>Past 24 Hours</h3>
+              {/* title */}
+              <h1>Earthquake List</h1>
+              <h3>Cool Subheader</h3>
               <div id="filter-container">
-                <FilterItem name="Filter"/>
-                <FilterItem name="Sort"/>
+                {/* filters components */}
+                <Accordion content="Filter" />
+                <Accordion content="Sort" />
               </div>
             </div>
-            <div id="list-container">
-              <EarthquakeList />
-            </div>
+            {/* list component */}
+            <List />
           </div>
         </div>
       </EarthquakeContextProvider>
