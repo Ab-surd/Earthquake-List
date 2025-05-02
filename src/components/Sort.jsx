@@ -8,6 +8,10 @@ function Sort() {
         setFilter((prev) => ({...prev, sort: v.target.value}))
     }
 
+    const handleOrderChange = (v) => {
+        setFilter((prev) => ({...prev, order: v.target.value}))
+    }
+
     return (
         <>
             <div className="controlItem">
@@ -23,6 +27,17 @@ function Sort() {
                 <label>
                     <input type="radio" name="selectSort" value="location" onChange={handleSortChange} />
                     Location
+                </label>
+            </div>
+            <div className="controlItem">
+                <p><small>SORT ORDER</small></p>
+                <label>
+                    <input type="radio" name="selectOrder" value="desc" onChange={handleOrderChange} defaultChecked />
+                    Descending
+                </label>
+                <label>
+                    <input type="radio" name="selectOrder" value="asc" onChange={handleOrderChange} />
+                    Ascending
                 </label>
             </div>
         </>
