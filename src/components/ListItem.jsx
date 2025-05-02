@@ -1,3 +1,5 @@
+import { useData } from "../context/DataContext";
+
 function timeAgo(time) {
     const seconds = Math.floor((Date.now() - time) / 1000);
     if (seconds < 60) {
@@ -19,10 +21,16 @@ function timeAgo(time) {
 }
 
 function ListItem ({ index, style, data }) {
+    const { setCurrentEarthquake } = useData()
+
     const earthquake = data[index];
 
+    const handleClick = () => {
+        setCurrentEarthquake(earthquake)
+    }
+
     return (
-        <button className="listItem" style={style}>
+        <button className="listItem" style={style} onClick={handleClick}>
             <small>{new Date(earthquake.properties.time).toLocaleDateString()}, {new Date(earthquake.properties.time).toLocaleTimeString()} - {timeAgo(earthquake.properties.time)}</small>
             <strong>Magnitude {earthquake.properties.mag}</strong>
             {earthquake.properties.place}

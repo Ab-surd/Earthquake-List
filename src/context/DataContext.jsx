@@ -20,6 +20,7 @@ function EarthquakeContextProvider({ children }) {
     const {latitude, longitude} = useUserLocation()
 
     const [earthquakeData, setEarthquakeData] = useState([]);
+    const [currentEarthquake, setCurrentEarthquake] = useState();
 
     const [filters, setFilter] = useState({
         magnitude: 2.5,
@@ -64,7 +65,7 @@ function EarthquakeContextProvider({ children }) {
     }, [filters])
 
     return (
-        <EarthquakeContext.Provider value={{ earthquakeData, filters, setFilter }}>
+        <EarthquakeContext.Provider value={{ earthquakeData, filters, setFilter, currentEarthquake, setCurrentEarthquake }}>
             {children}
         </EarthquakeContext.Provider>
     )
