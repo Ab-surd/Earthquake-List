@@ -1,28 +1,37 @@
 import { useData } from '../context/DataContext.jsx';
-import { FixedSizeList } from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import { List, useListRef } from 'react-window';
 import ListItem from './ListItem.jsx';
+import { useEffect, useState } from 'react';
 
-const Row = ({ index, style, data }) => {
-    return <ListItem index={index} style={style} data={data} />
+const Row = ({ index, style, earthquakeData, selectedIndex }) => {
+    return <ListItem index={index} style={style} earthquakeData={earthquakeData} selectedIndex={selectedIndex} />
 }
 
-function List() {
-    const { earthquakeData } = useData();
+function ListComponent() {
+    const listRef = useListRef(null)
+    const { earthquakeData, currentEarthquake } = useData()
+    const [selectedIndex, setSelectedIndex] = useState(0)
+
+    useEffect(() => {
+        let currentId = currentEarthquake?.id ?? currentEarthquake?.properties?.url.substring(currentEarthquake?.properties?.url.lastIndexOf('/') + 1)
+        if (typeof currentId == "undefined") {return}
+
+        let findIndex = earthquakeData.findIndex((earthquakeToSearch) => earthquakeToSearch.id == currentId)
+        if (listRef && findIndex) {
+            setSelectedIndex(findIndex)
+            listRef.current.scrollToRow({
+                align: "center",
+                behavior: "smooth",
+                index: findIndex
+            })
+        } else {return}
+    }, [currentEarthquake])
 
     return (
         <>
-            <div id="list">
-                <AutoSizer>
-                    {({ height, width }) => (
-                        <FixedSizeList height={height} itemCount={earthquakeData.length} itemSize={70} itemData={earthquakeData} width={width} >
-                            {Row}
-                        </FixedSizeList>
-                    )}
-                </AutoSizer>
-            </div>
+            <List listRef={listRef} rowComponent={Row} rowCount={earthquakeData.length} rowHeight={70} rowProps={{ earthquakeData, selectedIndex }} />
         </>
     )
 }
 
-export default List;
+export default ListComponent;

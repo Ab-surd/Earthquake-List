@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useData } from "../context/DataContext";
 
 function timeAgo(time) {
@@ -21,24 +20,17 @@ function timeAgo(time) {
     return (`${days} day${days == 1 ? "" : "s"} ago`);
 }
 
-function ListItem ({ index, style, data }) {
-    const { currentEarthquake, setCurrentEarthquake } = useData()
+function ListItem ({ index, style, earthquakeData, selectedIndex }) {
+    const { setCurrentEarthquake } = useData()
 
-    const earthquake = data[index];
+    const earthquake = earthquakeData[index];
 
     const handleClick = () => {
         setCurrentEarthquake(earthquake)
     }
 
-    useEffect(() => {
-        if (currentEarthquake) {
-            //TODO: auto scroll to current earthquake / highlight current earthquake in list
-            console.log(currentEarthquake)
-        }
-    }, [currentEarthquake])
-
     return (
-        <button className="listItem" style={style} onClick={handleClick}>
+        <button className={selectedIndex == index? "listItemSelected" : "listItem"} style={style} onClick={handleClick}>
             <small>{new Date(earthquake.properties.time).toLocaleDateString()}, {new Date(earthquake.properties.time).toLocaleTimeString()} - {timeAgo(earthquake.properties.time)}</small>
             <strong>Magnitude {earthquake.properties.mag}</strong>
             {earthquake.properties.place}

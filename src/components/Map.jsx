@@ -23,7 +23,8 @@ function Map() {
     useEffect(() => {
         mapboxgl.accessToken = "";
         const map = new mapboxgl.Map({
-            container: mapContainerRef.current
+            container: mapContainerRef.current,
+            style: "mapbox://styles/michael--/cm9kutbdp00ot01rcecqthand"
         })
         mapRef.current = map
 
@@ -104,7 +105,6 @@ function Map() {
     useEffect(() => {
         const mapDataSource = mapRef.current.getSource("data-points")
         if (mapDataSource) {
-            console.log(mapDataSource)
             mapDataSource.setData(toGeoJSON)
         }
     }, [earthquakeData])
