@@ -15,12 +15,13 @@ function ListComponent() {
     useEffect(() => {
         let currentId = currentEarthquake?.id ?? currentEarthquake?.properties?.url.substring(currentEarthquake?.properties?.url.lastIndexOf('/') + 1)
         if (typeof currentId == "undefined") {return}
+        console.log(currentId)
 
         let findIndex = earthquakeData.findIndex((earthquakeToSearch) => earthquakeToSearch.id == currentId)
-        if (listRef && findIndex) {
+        if (listRef && (findIndex >= 0)) {
             setSelectedIndex(findIndex)
             listRef.current.scrollToRow({
-                align: "center",
+                align: "auto",
                 behavior: "smooth",
                 index: findIndex
             })
@@ -29,7 +30,7 @@ function ListComponent() {
 
     return (
         <>
-            <List listRef={listRef} rowComponent={Row} rowCount={earthquakeData.length} rowHeight={70} rowProps={{ earthquakeData, selectedIndex }} />
+            <List id="list-container" listRef={listRef} rowComponent={Row} rowCount={earthquakeData.length} rowHeight={70} rowProps={{ earthquakeData, selectedIndex }} />
         </>
     )
 }
