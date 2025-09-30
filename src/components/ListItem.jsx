@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useData } from "../context/DataContext";
 
 function timeAgo(time) {
@@ -21,13 +22,20 @@ function timeAgo(time) {
 }
 
 function ListItem ({ index, style, data }) {
-    const { setCurrentEarthquake } = useData()
+    const { currentEarthquake, setCurrentEarthquake } = useData()
 
     const earthquake = data[index];
 
     const handleClick = () => {
         setCurrentEarthquake(earthquake)
     }
+
+    useEffect(() => {
+        if (currentEarthquake) {
+            //TODO: auto scroll to current earthquake / highlight current earthquake in list
+            console.log(currentEarthquake)
+        }
+    }, [currentEarthquake])
 
     return (
         <button className="listItem" style={style} onClick={handleClick}>

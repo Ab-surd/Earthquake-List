@@ -1,8 +1,9 @@
 import { useData } from "../context/DataContext";
+import useUserLocation from "../hooks/useUserLocation";
 
 function Sort() {
-
     const { setFilter } = useData();
+    const {latitude, longitude} = useUserLocation();
 
     const handleSortChange = (v) => {
         setFilter((prev) => ({...prev, sort: v.target.value}))
@@ -25,7 +26,7 @@ function Sort() {
                     Magnitude
                 </label>
                 <label>
-                    <input type="radio" name="selectSort" value="location" onChange={handleSortChange} />
+                    <input type="radio" name="selectSort" value="location" onChange={handleSortChange} disabled={latitude ? longitude ? false : true : true} />
                     Location
                 </label>
             </div>

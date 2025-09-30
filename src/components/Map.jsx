@@ -9,6 +9,8 @@ function Map() {
     const mapRef = useRef()
     const mapContainerRef = useRef()
 
+    const currentTime = Date.now()
+
     const toGeoJSON = ({
         type: "FeatureCollection",
         features: earthquakeData.map((earthquake) => ({
@@ -19,7 +21,7 @@ function Map() {
     })
 
     useEffect(() => {
-        mapboxgl.accessToken = "pk.eyJ1IjoibWljaGFlbC0tIiwiYSI6ImNtOWtzZjBnODB0NDUya3Byb3AyY2NtMncifQ.HFQAbCOMSzGiYDZzTdwCrQ";
+        mapboxgl.accessToken = "";
         const map = new mapboxgl.Map({
             container: mapContainerRef.current
         })
@@ -35,52 +37,49 @@ function Map() {
             })
 
             map.addLayer({
-                id: "weak-quakes",
+                id: "quakes",
                 type: "circle",
                 source: "data-points",
                 paint: {
-                    "circle-color": "#fff",
-                    "circle-radius": 3
-                }
-            })
-
-            map.addLayer({
-                id: "med-quakes",
-                type: "circle",
-                source: "data-points",
-                filter: [">", ["get", "mag"], 3.0],
-                paint: {
-                    "circle-color": "#ffff00",
-                    "circle-radius": 4
-                }
-            })
-
-            map.addLayer({
-                id: "strong-quakes",
-                type: "circle",
-                source: "data-points",
-                filter: [">", ["get", "mag"], 4.5],
-                paint: {
-                    "circle-color": "#ffa500",
-                    "circle-radius": 8
-                }
-            })
-
-            map.addLayer({
-                id: "severe-quakes",
-                type: "circle",
-                source: "data-points",
-                filter: [">", ["get", "mag"], 6.0],
-                paint: {
-                    "circle-color": "#ff0000",
-                    "circle-radius": 16
+                    "circle-color": [
+                        "case",
+                        [">", ["get", "mag"], 6.0],
+                        "#ff0000",
+                        [">", ["get", "mag"], 4.5],
+                        "#ffa500",
+                        [">", ["get", "mag"], 3.0],
+                        "#ffff00",
+                        "#fff"
+                    ],
+                    "circle-radius": [
+                        "case",
+                        [">", ["get", "mag"], 6.0],
+                        16,
+                        [">", ["get", "mag"], 4.5],
+                        8,
+                        [">", ["get", "mag"], 3.0],
+                        4,
+                        3
+                    ],
+                    "circle-opacity": [
+                        "case",
+                        ["<", ["get", "mag"], currentTime - 2628000000],
+                        0.4,
+                        ["<", ["get", "mag"], currentTime - 604800000],
+                        0.6,
+                        ["<", ["get", "mag"], currentTime - 86400000],
+                        0.8,
+                        ["<", ["get", "time"], currentTime - 3600000],
+                        1,
+                        0.2
+                    ]
                 }
             })
         })
 
         map.on("click", (v) => {
             const features = map.queryRenderedFeatures(v.point, {
-                layers: ["severe-quakes", "strong-quakes", "med-quakes", "weak-quakes"]
+                layers: ["quakes"]
             })
 
             if (!features.length) return
