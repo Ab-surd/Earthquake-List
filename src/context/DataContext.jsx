@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, useContext } from 'react';
 import { fetchAPIData } from '../services/api';
 import useUserLocation from '../hooks/useUserLocation';
+import { data, filter } from 'motion/react-m';
 
 const EarthquakeContext = createContext();
 export const useData = () => useContext(EarthquakeContext);
@@ -19,15 +20,15 @@ function EarthquakeContextProvider({ children }) {
 
     const {latitude, longitude} = useUserLocation()
 
-    const [earthquakeData, setEarthquakeData] = useState([]);
-    const [currentEarthquake, setCurrentEarthquake] = useState();
-
     const [filters, setFilter] = useState({
         magnitude: 2.5,
         period: "day",
         sort: "date",
         order: "desc"
     });
+
+    const [earthquakeData, setEarthquakeData] = useState([]);
+    const [currentEarthquake, setCurrentEarthquake] = useState();
 
     const getComparison = (smallerItem, largerItem) => {
         const order = filters.order
@@ -46,10 +47,10 @@ function EarthquakeContextProvider({ children }) {
             let sortedResult = filteredResult
             switch (filters.sort) {
                 case "date": 
-                    sortedResult = filteredResult.sort((a, b) => getComparison(a.properties.time, b.properties.time));
+                    sortedResult = filteredResult.sort((a, b) => getComparison(filters, a.properties.time, b.properties.time));
                     break;
                 case "magnitude":
-                    sortedResult = filteredResult.sort((a, b) => getComparison(a.properties.mag, b.properties.mag));
+                    sortedResult = filteredResult.sort((a, b) => getComparison(filters, a.properties.mag, b.properties.mag));
                     break;
                 case "location":
                     sortedResult = filteredResult.sort((a, b) => {

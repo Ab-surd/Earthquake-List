@@ -11,6 +11,13 @@ function Map() {
 
     const currentTime = Date.now()
 
+    const setLayerData = () => {
+        const mapDataSource = mapRef.current.getSource("data-points")
+        if (mapDataSource) {
+            mapDataSource.setData(toGeoJSON)
+        }
+    }
+
     const toGeoJSON = ({
         type: "FeatureCollection",
         features: earthquakeData.map((earthquake) => ({
@@ -64,11 +71,11 @@ function Map() {
                     ],
                     "circle-opacity": [
                         "case",
-                        ["<", ["get", "mag"], currentTime - 2628000000],
+                        ["<", ["get", "time"], currentTime - 2628000000],
                         0.4,
-                        ["<", ["get", "mag"], currentTime - 604800000],
+                        ["<", ["get", "time"], currentTime - 604800000],
                         0.6,
-                        ["<", ["get", "mag"], currentTime - 86400000],
+                        ["<", ["get", "time"], currentTime - 86400000],
                         0.8,
                         ["<", ["get", "time"], currentTime - 3600000],
                         1,
@@ -101,12 +108,10 @@ function Map() {
             })
         }
     }, [currentEarthquake])
-
+    
     useEffect(() => {
-        const mapDataSource = mapRef.current.getSource("data-points")
-        if (mapDataSource) {
-            mapDataSource.setData(toGeoJSON)
-        }
+        setLayerData()
+        mapRef.current.on("load", setLayerData)
     }, [earthquakeData])
 
     return (
