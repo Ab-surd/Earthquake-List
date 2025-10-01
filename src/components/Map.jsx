@@ -1,13 +1,16 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useData } from '../context/DataContext';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { map } from 'motion/react-m';
 
 function Map() {
-    const { earthquakeData, currentEarthquake, setCurrentEarthquake } = useData()
+    const { earthquakeData, currentEarthquake, setCurrentEarthquake, setSelectedIndex } = useData()
 
     const mapRef = useRef()
     const mapContainerRef = useRef()
+
+    const [currentPopup, setCurrentPopup] = useState()
 
     const currentTime = Date.now()
 
@@ -105,6 +108,39 @@ function Map() {
             mapRef.current.flyTo({
                 center: currentEarthquake.geometry.coordinates,
                 zoom: 12
+            })
+
+            if (currentPopup) {
+                currentPopup.remove()
+                setCurrentPopup(null)
+            }
+
+            console.log(currentEarthquake)
+            
+            const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: true })
+                .setLngLat([currentEarthquake.geometry.coordinates[0], currentEarthquake.geometry.coordinates[1]])
+                .setHTML(
+                    `<div>
+                        <h3>${currentEarthquake.properties.mag} magnitude earthquake</h3>
+                    </div>
+                    <div>
+                        <div>
+                            <p>${currentEarthquake.properties.place}</p>
+                        </div>
+                        <div>
+                            <p>${new Date(currentEarthquake.properties.time).toLocaleDateString()}, ${new Date(currentEarthquake.properties.time).toLocaleTimeString()}</p>
+                        </div>
+                        <div>
+                            <p>${currentEarthquake.properties.tsunami ? "tsunami generated" : "no tsunami generated"}</p>
+                        </div>
+                    </div>`
+                )
+                .addTo(mapRef.current)
+
+            setCurrentPopup(popup)
+
+            popup.on("close", () => {
+                setSelectedIndex(-1)
             })
         }
     }, [currentEarthquake])

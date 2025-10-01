@@ -9,8 +9,7 @@ const Row = ({ index, style, earthquakeData, selectedIndex }) => {
 
 function ListComponent() {
     const listRef = useListRef(null)
-    const { earthquakeData, currentEarthquake } = useData()
-    const [selectedIndex, setSelectedIndex] = useState(-1)
+    const { earthquakeData, currentEarthquake, selectedIndex, setSelectedIndex } = useData()
 
     useEffect(() => {
         let currentId = currentEarthquake?.id ?? currentEarthquake?.properties?.url.substring(currentEarthquake?.properties?.url.lastIndexOf('/') + 1)
@@ -32,7 +31,7 @@ function ListComponent() {
 
     return (
         <>
-            <List id="list-container" listRef={listRef} rowComponent={Row} rowCount={earthquakeData.length} rowHeight={70} rowProps={{ earthquakeData, selectedIndex }} />
+            <List id="list-container" listRef={listRef} rowComponent={Row} rowCount={earthquakeData.length} rowHeight={80} rowProps={{ earthquakeData, selectedIndex }} />
         </>
     )
 }

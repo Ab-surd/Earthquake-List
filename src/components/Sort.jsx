@@ -16,7 +16,7 @@ function Sort() {
     return (
         <>
             <div className="controlItem">
-                <p><small>SORT EARTHQUAKES BY</small></p>
+                <p className="controlItemLabel"><small>SORT EARTHQUAKES BY</small></p>
                 <label>
                     <input type="radio" name="selectSort" value="date" onChange={handleSortChange} defaultChecked />
                     Recent
@@ -31,7 +31,7 @@ function Sort() {
                 </label>
             </div>
             <div className="controlItem">
-                <p><small>SORT ORDER</small></p>
+                <p className="controlItemLabel"><small>SORT ORDER</small></p>
                 <label>
                     <input type="radio" name="selectOrder" value="desc" onChange={handleOrderChange} defaultChecked />
                     Descending

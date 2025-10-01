@@ -14,7 +14,7 @@ function Filter() {
     return (
         <>
             <div className="controlItem">
-                <p><small>DISPLAY EARTHQUAKES FROM</small></p>
+                <p className="controlItemLabel"><small>DISPLAY EARTHQUAKES FROM</small></p>
                 <label>
                     <input type="radio" name="selectDay" value="day" onChange={handlePeriodChange} defaultChecked />
                     Past Day
@@ -29,7 +29,7 @@ function Filter() {
                 </label>
             </div>
             <div className="controlItem">
-                <p><small>DISPLAY EARTHQUAKES WITH</small></p>
+                <p className="controlItemLabel"><small>DISPLAY EARTHQUAKES WITH</small></p>
                 <label>
                     <input type="radio" name="selectMag" value={2.5} onChange={handleMagChange} defaultChecked />
                     Significant Magnitudes (2.5+)

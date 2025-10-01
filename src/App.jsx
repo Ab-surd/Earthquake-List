@@ -13,8 +13,7 @@ function App() {
           <div id="sidebar">
             <div id="header">
               {/* title */}
-              <h1>Earthquake List</h1>
-              <h3>Cool Subheader</h3>
+              <h1>Recent Earthquakes</h1>
               <div id="filter-container">
                 {/* filters components */}
                 <Accordion content="Filter" />
