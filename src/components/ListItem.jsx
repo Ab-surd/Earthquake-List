@@ -31,9 +31,13 @@ function ListItem ({ index, style, earthquakeData, selectedIndex }) {
 
     return (
         <button className={selectedIndex == index? "listItemSelected" : "listItem"} style={style} onClick={handleClick}>
-            <small>{new Date(earthquake.properties.time).toLocaleDateString()}, {new Date(earthquake.properties.time).toLocaleTimeString()} - {timeAgo(earthquake.properties.time)}</small>
-            <strong>Magnitude {earthquake.properties.mag}</strong>
-            {earthquake.properties.place}
+            <p className="listItemText">
+                <small>{new Date(earthquake.properties.time).toLocaleDateString()}, {new Date(earthquake.properties.time).toLocaleTimeString()} - {timeAgo(earthquake.properties.time)}</small>
+                <br></br>
+                <strong>Magnitude {earthquake.properties.mag}</strong>
+                <br></br>
+                {earthquake.properties.place}
+            </p>
         </button>
     )
 }

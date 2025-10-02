@@ -3,6 +3,7 @@ import { useData } from '../context/DataContext';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { map } from 'motion/react-m';
+import { color } from 'motion/react';
 
 function Map() {
     const { earthquakeData, currentEarthquake, setCurrentEarthquake, setSelectedIndex } = useData()
@@ -74,14 +75,14 @@ function Map() {
                     ],
                     "circle-opacity": [
                         "case",
-                        ["<", ["get", "time"], currentTime - 2628000000],
-                        0.4,
-                        ["<", ["get", "time"], currentTime - 604800000],
-                        0.6,
-                        ["<", ["get", "time"], currentTime - 86400000],
-                        0.8,
-                        ["<", ["get", "time"], currentTime - 3600000],
+                        [">", ["get", "time"], currentTime - 3600000],
                         1,
+                        [">", ["get", "time"], currentTime - 86400000],
+                        0.8,
+                        [">", ["get", "time"], currentTime - 604800000],
+                        0.6,
+                        [">", ["get", "time"], currentTime - 2628000000],
+                        0.4,
                         0.2
                     ]
                 }
@@ -114,24 +115,21 @@ function Map() {
                 currentPopup.remove()
                 setCurrentPopup(null)
             }
-
-            console.log(currentEarthquake)
             
             const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: true })
                 .setLngLat([currentEarthquake.geometry.coordinates[0], currentEarthquake.geometry.coordinates[1]])
                 .setHTML(
-                    `<div>
-                        <h3>${currentEarthquake.properties.mag} magnitude earthquake</h3>
-                    </div>
-                    <div>
-                        <div>
-                            <p>${currentEarthquake.properties.place}</p>
-                        </div>
-                        <div>
-                            <p>${new Date(currentEarthquake.properties.time).toLocaleDateString()}, ${new Date(currentEarthquake.properties.time).toLocaleTimeString()}</p>
-                        </div>
-                        <div>
-                            <p>${currentEarthquake.properties.tsunami ? "tsunami generated" : "no tsunami generated"}</p>
+                    `<div id="popup-container">
+                        <h2><strong>${currentEarthquake.properties.mag} magnitude earthquake</strong></h2>
+                            <p>
+                                <strong>Location:</strong> ${currentEarthquake.properties.place} <br />
+                                <strong>Time:</strong> ${new Date(currentEarthquake.properties.time).toLocaleDateString()}, ${new Date(currentEarthquake.properties.time).toLocaleTimeString()} <br />
+                                <strong>Tsunami Generated:</strong> ${currentEarthquake.properties.tsunami ? "Yes" : "No"} <br />
+                            </p>
+                            <p style="color: ${currentEarthquake.properties.alert == "red" ? "#a20000ff" : currentEarthquake.properties.alert == "orange" ? "#ff6a00ff" : currentEarthquake.properties.alert == "yellow" ? "#ffc800" : "green"};">
+                                ${currentEarthquake.properties.alert == "red" ? "Very high" : currentEarthquake.properties.alert == "orange" ? "High" : currentEarthquake.properties.alert == "yellow" ? "Moderate" : "Low"} likelihood of damage or casualties
+                            </p>
+                            <a href=${currentEarthquake.properties.url}>More Information</a>
                         </div>
                     </div>`
                 )
@@ -141,6 +139,7 @@ function Map() {
 
             popup.on("close", () => {
                 setSelectedIndex(-1)
+                setCurrentEarthquake(null)
             })
         }
     }, [currentEarthquake])

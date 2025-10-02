@@ -14,7 +14,6 @@ function ListComponent() {
     useEffect(() => {
         let currentId = currentEarthquake?.id ?? currentEarthquake?.properties?.url.substring(currentEarthquake?.properties?.url.lastIndexOf('/') + 1)
         if (typeof currentId == "undefined") {return}
-        console.log(currentId)
 
         let findIndex = earthquakeData.findIndex((earthquakeToSearch) => earthquakeToSearch.id == currentId)
         if (listRef && (findIndex >= 0) && (earthquakeData.length > 0)) {
