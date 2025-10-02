@@ -32,7 +32,7 @@ function Map() {
     })
 
     useEffect(() => {
-        mapboxgl.accessToken = "pk.eyJ1IjoibWljaGFlbC0tIiwiYSI6ImNtZzVrZzV4ODA2NW4ya3B4cGJxOXQyYnEifQ.ydIN-2tRAkbvr2A6zHW7DA";
+        mapboxgl.accessToken = "pk.eyJ1IjoibWljaGFlbC0tIiwiYSI6ImNtZzltcnVheTBiZ3Eya3E0a2M0NHRjZjcifQ.99HCi3RI-sc0vw6Y01lPUg";
         const map = new mapboxgl.Map({
             container: mapContainerRef.current,
             style: "mapbox://styles/michael--/cm9kutbdp00ot01rcecqthand"
